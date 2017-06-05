@@ -1,0 +1,18 @@
+group 'acacia.as.ui.test'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile ('org.seleniumhq.selenium:selenium-java:3.0.1','org.testng:testng:6.1.1',
+            "org.seleniumhq.selenium:selenium-chrome-driver:2.41.0",
+            "org.seleniumhq.selenium:selenium-firefox-driver:2.41.0",
+            'log4j:log4j:1.2.17',
+            'org.slf4j:slf4j-simple:1.6.1')
+}
