@@ -1,6 +1,7 @@
 package com.acacia.myProduct;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
@@ -13,18 +14,18 @@ public class DynamicElement extends Element {
     private final Identifier id;
     private final String foundBy;
 
-
-    public DynamicElement(Context parent, WebElement element, By refreshBy, Identifier id, String foundBy) {
+    /**  --------- Constructor ----------------*/
+    public DynamicElement(Context parent, WebElement element,  Identifier id, String foundBy) {
         super(parent);
         this.element = element;
-        this.refreshBy = refreshBy;
+        this.refreshBy = null;
         if (id == null)
             throw  new NullPointerException("id can not be null");
         this.id = id;
         this.foundBy = foundBy;
     }
 
-    /**  --------- Constructor ----------------*/
+
 
     @Override
     protected SearchContext seleniumContext() {
@@ -33,8 +34,18 @@ public class DynamicElement extends Element {
 
     @Override
     public void persist() {
-
-
+        getParent().persist();
+        try {
+            if (refreshBy == null)
+                this.refreshBy = id.identify(this);
+        } catch (IllegalStateException e) {
+           String message = String.format("Cause IllegalStateException: Trying to persist() a stale element. Try invoking persist() earlier.\n(%s)",
+                   this.toString());
+            throw new IllegalStateException(message, e);
+        }catch (NoSuchElementException e){
+            String message = String.format("NoSuchElementException: Try invoking persist() earlier.\n(%s)", this.toString());
+            throw new IllegalStateException(message,e);
+        }
     }
 
     @Override
@@ -49,5 +60,10 @@ public class DynamicElement extends Element {
     @Override
     protected WebElement webElement() {
         return element;
+    }
+
+    @Override
+    public String toString() {
+         return String.format("Element [WebElement: %s][By: %s][Identifier:%s][FoundBy:%s]", element, refreshBy, id, this.foundBy);
     }
 }

@@ -17,7 +17,7 @@ public abstract class Context {
 
    public Element findElement(By by, Identifier identifier){
 
-       return
+       return UiSynchronizedElement.getElment();
    }
 
 
@@ -36,6 +36,7 @@ public abstract class Context {
            return seleniumContext().findElement(by);
        }
    }
+
 
 
    public abstract void persist();

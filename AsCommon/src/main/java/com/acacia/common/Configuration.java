@@ -20,5 +20,10 @@ public class Configuration {
     }
 
 
+    public static String getValue(String key, String defaultValue) {
+        return properties.getProperty(key, defaultValue);
+    }
+
+
 
 }

@@ -26,6 +26,9 @@ public class StaticElement extends  Element {
         getParent().persist();
     }
 
+    /**
+     * getParent come from Element.getParent and findElement is Context's SearchContext.findElement()
+     */
     @Override
     protected void refresh() {
         //Need to investigate
@@ -40,12 +43,18 @@ public class StaticElement extends  Element {
     protected SearchContext seleniumContext() {
         if (element == null)
             refresh();
-
-        return null;
+        return element;
     }
 
     @Override
     protected WebElement webElement() {
-        return null;
+        if ( element == null)
+            refresh();
+        return element;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Element [WebElement:%s][By:%s]",element,refreshBy);
     }
 }
