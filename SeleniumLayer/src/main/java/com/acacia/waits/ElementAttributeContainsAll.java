@@ -18,7 +18,12 @@ public class ElementAttributeContainsAll implements ElementCondition{
     }
 
 
-
+    /**
+     * e.g element's attribut is "This is testing" and when pass "is test" as valuesToConatin. The first for loop is
+     * existOrNot = true && true. The second for loop will existOrNot = true && false. So if one value didn't contain it will return as false.
+     * @return
+     * @throws IllegalStateException
+     */
     @Override
     public boolean occurred() throws IllegalStateException {
         boolean existOrNot = true;
@@ -32,6 +37,6 @@ public class ElementAttributeContainsAll implements ElementCondition{
     public  String toString(){
         final StringBuilder values = new StringBuilder(valuesToContains.length);
         values.append(valuesToContains);
-        return values.toString();
+        return String.format("ElementAttributeConainsAll [Element: %s][Attribute: %s][Values: %s]",element, attribute,values.toString());
     }
 }

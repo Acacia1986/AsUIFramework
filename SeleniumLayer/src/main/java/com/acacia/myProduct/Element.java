@@ -1,14 +1,46 @@
 package com.acacia.myProduct;
 
+import com.acacia.waits.ElementCondition;
 import com.acacia.waits.Waiter;
 import org.openqa.selenium.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by miaomiao on 6/4/2017.
  */
-public abstract class Element implements ImElement{
+public abstract class Element extends Context implements ImElement{
+
+
+
+    private final Context parent;
+
+
+
+    /**
+     * Constructor part
+     * @param parent
+     */
+    protected Element(Context parent){
+        this.parent = parent;
+
+    }
+
+
+    /* ----------Get,Set----------- */
+    public Context getParent() {
+        return parent;
+    }
+
+
+    /* ------------- Its own abstract method ----------------------*/
+    //These abstract method come from Context Class and one abstract method seleniumContext didn't implement here. It will be implimented in
+    //StaticElement class and DynamicElement class.
+    @Override
+    public abstract void persist();
+
+    @Override
+    protected abstract void refresh() throws IllegalStateException, java.util.NoSuchElementException;
 
     /**
      * This abstract method will let Element Class to be implemented. SO for Element Class will have StaticElement and DynamicElement
@@ -16,19 +48,59 @@ public abstract class Element implements ImElement{
      */
     protected abstract WebElement webElement();
 
+
+    /*  -------------Impliment Method Part ---------------------*/
+
+    /**
+     * Create a Waiter class object for the other method to call
+     * @return
+     */
+    @Override
+    public Waiter waitFor(){
+        return new Waiter(this);
+    }
+
     @Override
     public void click() {
-        this.webElement().click();
+        try {
+            this.webElement().click();
+        } catch (Exception handleRetry) {
+            try {
+                waitFor().exists();
+                waitFor().visible();
+                webElement().click();
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(),e);
+            }
+        }
     }
 
     @Override
     public void submit() {
-
+        try {
+            webElement().submit();
+        } catch (Exception handleRety) {
+            try {
+                waitFor().visible();
+                webElement().submit();
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(),e);
+            }
+        }
     }
 
     @Override
     public void sendKeys(CharSequence... keysToSend) {
-
+        try {
+            webElement().sendKeys(keysToSend);
+        } catch (Exception handleRetry) {
+            try {
+                waitFor().visible();
+                webElement().sendKeys(keysToSend);
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(),e);
+            }
+        }
     }
 
     @Override
@@ -47,8 +119,64 @@ public abstract class Element implements ImElement{
     }
 
     @Override
-    public String getTagName() {
+    public String getHTML() {
         return null;
+    }
+
+    @Override
+    public void dragAndDropTo(Element target) {
+
+    }
+
+    @Override
+    public void dragWaitAndDrop(Element target, ElementCondition condition) throws IllegalStateException, TimeoutException, InterruptedException {
+
+    }
+
+
+
+    @Override
+    public boolean exists() throws IllegalStateException {
+        return false;
+    }
+
+    @Override
+    public void doMouseOver() {
+
+    }
+
+    @Override
+    public Waiter waitFor(long timeout) {
+        return null;
+    }
+
+    @Override
+    public Waiter waitFor(long timeout, long pollDelay) {
+        return null;
+    }
+
+    @Override
+    public void controlClick() {
+
+    }
+
+    @Override
+    public void hoverOnCanvas(int x, int y) {
+
+    }
+
+    @Override
+    public String getTagName() {
+        try {
+            return webElement().getTagName();
+        } catch (Exception hadleRetry) {
+            try {
+                waitFor().exists();
+                return  webElement().getTagName();
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(),e);
+            }
+        }
     }
 
     @Override
@@ -111,8 +239,5 @@ public abstract class Element implements ImElement{
         return null;
     }
 
-    @Override
-    public Waiter waitFor(){
-        return new Waiter(this);
-    }
+
 }
