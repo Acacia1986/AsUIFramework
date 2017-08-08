@@ -3,13 +3,15 @@ package com.acacia.myProduct;
 import com.acacia.waits.ElementCondition;
 import com.acacia.waits.Waiter;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by miaomiao on 6/4/2017.
  */
 public abstract class Element extends Context implements ImElement{
+    private final Browser browser;
 
 
 
@@ -22,6 +24,7 @@ public abstract class Element extends Context implements ImElement{
      * @param parent
      */
     protected Element(Context parent){
+        this.browser = parent.getBrowser();
         this.parent = parent;
 
     }
@@ -31,7 +34,10 @@ public abstract class Element extends Context implements ImElement{
     public Context getParent() {
         return parent;
     }
-
+    @Override
+    public Browser getBrowser() {
+        return browser;
+    }
 
     /* ------------- Its own abstract method ----------------------*/
     //These abstract method come from Context Class and one abstract method seleniumContext didn't implement here. It will be implimented in
@@ -74,6 +80,8 @@ public abstract class Element extends Context implements ImElement{
             }
         }
     }
+
+
 
     @Override
     public void submit() {
@@ -237,6 +245,22 @@ public abstract class Element extends Context implements ImElement{
     @Override
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
         return null;
+    }
+
+
+    /* ---------------------- Special method --------------------------------*/
+
+    public void clickAndHold() {
+        try {
+            new Actions(browser.getWebDriver()).clickAndHold(webElement()).perform();
+        } catch (Exception handleRetry) {
+            try {
+                waitFor().exists();
+                new Actions(browser.getWebDriver()).clickAndHold(webElement()).perform();
+            } catch (Exception e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
     }
 
 

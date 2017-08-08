@@ -17,6 +17,9 @@ import java.net.URL;
 public class Browser extends Context {
     Logger logger = LoggerFactory.getLogger(Browser.class);
     private final By[] locatorIgnoreListOnRefresh;
+
+
+
     protected EidWebdriver webDriver;
     private final String baseUrl;
     //Browser Size
@@ -76,8 +79,18 @@ public class Browser extends Context {
 
     }
 
+    /*---------------------------Get/Set----------------------------------------*/
+    public EidWebdriver getWebDriver() {
+        return webDriver;
+    }
+
 
     /* ------------------------Extend from Context ------------------------*/
+
+    @Override
+    protected Browser getBrowser() {
+        return this;
+    }
 
     protected SearchContext seleniumContext() {
         return null;
