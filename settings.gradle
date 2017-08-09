@@ -1,4 +1,5 @@
 rootProject.name = 'AsUI'
 include 'SeleniumLayer'
 include 'AsCommon'
+include 'Selenide'
 
