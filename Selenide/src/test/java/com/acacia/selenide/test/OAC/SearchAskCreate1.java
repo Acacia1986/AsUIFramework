@@ -22,7 +22,7 @@ public class SearchAskCreate1 {
         logger.info("testSearchAskCreate1");
         long time = System.currentTimeMillis();
         //Open VA
-        open("http://slc08dim.us.oracle.com:9704/va/home.jsp");
+        open("http://slc08cwe.us.oracle.com:9704/va/home.jsp");
         //Login as admin
         $(By.id("idUser")).setValue("dvauthoruser");
         $(By.id("idPassword")).setValue("welcome1");

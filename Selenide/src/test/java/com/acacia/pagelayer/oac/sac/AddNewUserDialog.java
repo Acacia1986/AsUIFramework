@@ -40,8 +40,9 @@ public class AddNewUserDialog {
 
 
     public void checkAddUserDialogTitle(){
-         add_new_user_title.shouldHave(Condition.matchText("Add New User"));
+        add_new_user_title.shouldHave(Condition.matchText("Add New User"));
     }
+
 
     /**
      * Check these fields are required.
@@ -89,6 +90,7 @@ public class AddNewUserDialog {
     public void save(){
         save_button.shouldBe(Condition.visible);
         save_button.click();
+
     }
 
     /**

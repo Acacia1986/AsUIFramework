@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.executeJavaScript;
 
 /**
  * Created by miaomiao on 8/20/2017.
@@ -34,8 +35,12 @@ public class AddRoleDialog {
      * @param roleInfo
      */
     public  void enterRoleInfo(String... roleInfo){
+        role_Name_Input.setValue(roleInfo[0]);
         role_Name_Input.sendKeys(roleInfo[0]);
-        role_Display_Name_Input.sendKeys(roleInfo[1]);
+        //role_Name_Input.click();
+        //executeJavaScript("arguments[0].setAttribute('aria-required','false')");
+        executeJavaScript("arguments[0].setAttribute('value',arguments[1])",role_Name_Input,roleInfo[0]);
+        //role_Display_Name_Input.sendKeys(roleInfo[1]);
         role_Description_Input.sendKeys(roleInfo[2]);
     }
 
@@ -44,7 +49,7 @@ public class AddRoleDialog {
      */
     public void save(){
         save_Button.shouldBe(Condition.appear);
-        save_Button.click();
+        save_Button.doubleClick();
     }
 
 

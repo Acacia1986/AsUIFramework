@@ -5,6 +5,8 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.executeJavaScript;
+import static com.codeborne.selenide.Selenide.sleep;
 
 /**
  * Created by miaomiao on 8/20/2017.
@@ -45,7 +47,10 @@ public class ManageMemberContainer {
      * @param name
      */
     public void enterNameToFilter(String name){
-        name_Filter.sendKeys(name);
+       // name_Filter.setValue(name);
+        name_Filter.clear();
+        name_Filter.click();
+        executeJavaScript("arguments[0].setAttribute('value',arguments[1])",name_Filter,name);
     }
 
     /**
@@ -53,14 +58,20 @@ public class ManageMemberContainer {
      */
     public void clickSearchButton(){
         search_Button.should(Condition.enabled);
-        search_Button.click();
+        search_Button.doubleClick();
     }
 
     /**
      * Wait until the result displayed in the available panel.
      */
     public void waitUntilGetResult(){
-        available_User_Panel.$(By.xpath("/li/label/input")).waitUntil(Condition.appear,9000);
+       //available_User_Panel.$(By.xpath("/li/label/input")).waitUntil(Condition.appear,9000);
+
+        do{
+            sleep(3000);
+
+        }while(!available_User_Panel.find(By.xpath("/li/label/input")).isDisplayed());
+
     }
 
     /**
