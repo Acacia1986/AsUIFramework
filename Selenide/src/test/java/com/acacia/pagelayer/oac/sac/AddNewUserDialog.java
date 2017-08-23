@@ -39,32 +39,100 @@ public class AddNewUserDialog {
 
 
 
-    public void checkAddUserDialogTitle(){
-        add_new_user_title.shouldHave(Condition.matchText("Add New User"));
+    public SelenideElement getAddUserDialogTitle(){
+        return add_new_user_title;
+        //add_new_user_title.shouldHave(Condition.matchText("Add New User"));
     }
 
+    public enum FIELDNAME{
+        USER_NAME,
+        FIRST_NAME,
+        LAST_NAME,
+        PASSWORD,
+        CONFIRM_PASSWORD
+    }
 
     /**
      * Check these fields are required.
      * Fields: username,firstName,lastName,password,confirm password.
      */
-    public void checkFieldShouldBeRequired(){
+//    public void checkFieldShouldBeRequired(){
+//
+//        user_Name.find(label).shouldHave(Condition.matchText("Username"));
+//        user_Name.find(span).getAttribute("title").equals("Required");
+//
+//        user_First_Name.find(label).shouldHave(Condition.matchText("First Name"));
+//        user_First_Name.find(span).getAttribute("title").equals("Required");
+//
+//        user_Last_Name.find(label).shouldHave(Condition.matchText("Last Name"));
+//        user_Last_Name.find(span).getAttribute("title").equals("Required");
+//
+//        user_Password.find(label).shouldHave(Condition.matchesText("Password"));
+//        user_Password.find(span).getAttribute("title").equals("Required");
+//
+//        user_Confirm_Password.find(label).shouldHave(Condition.matchText("Confirm Password"));
+//        user_Confirm_Password.find(span).getAttribute("title").equals("Required");
+//    }
 
-        user_Name.find(label).shouldHave(Condition.matchText("Username"));
-        user_Name.find(span).getAttribute("title").equals("Required");
-
-        user_First_Name.find(label).shouldHave(Condition.matchText("First Name"));
-        user_First_Name.find(span).getAttribute("title").equals("Required");
-
-        user_Last_Name.find(label).shouldHave(Condition.matchText("Last Name"));
-        user_Last_Name.find(span).getAttribute("title").equals("Required");
-
-        user_Password.find(label).shouldHave(Condition.matchesText("Password"));
-        user_Password.find(span).getAttribute("title").equals("Required");
-
-        user_Confirm_Password.find(label).shouldHave(Condition.matchText("Confirm Password"));
-        user_Confirm_Password.find(span).getAttribute("title").equals("Required");
+    /**
+     *
+     * @param fieldname
+     * @return
+     */
+    public SelenideElement getFieldRequired(FIELDNAME fieldname){
+        SelenideElement target = null;
+        switch(fieldname){
+            case USER_NAME:
+                target = user_Name.find(span);
+                break;
+            case FIRST_NAME:
+                target = user_First_Name.find(span);
+                break;
+            case LAST_NAME:
+                target = user_Last_Name.find(span);
+                break;
+            case PASSWORD:
+                target = user_Password.find(span);
+                break;
+            case CONFIRM_PASSWORD:
+                target = user_Confirm_Password.find(span);
+            default:
+        }
+        return target;
     }
+
+
+
+
+    /**
+     * Check the Field name
+     * @param fieldname
+     * @return
+     */
+    public SelenideElement getFieldName(FIELDNAME fieldname){
+        SelenideElement target = null;
+        switch(fieldname){
+            case USER_NAME:
+                target = user_Name.find(label);
+            break;
+            case FIRST_NAME:
+                target = user_First_Name.find(label);
+            break;
+            case LAST_NAME:
+                target = user_Last_Name.find(label);
+            break;
+            case PASSWORD:
+                target = user_Password.find(label);
+            break;
+            case CONFIRM_PASSWORD:
+                target = user_Confirm_Password.find(label);
+            default:
+        }
+        return target;
+    }
+
+
+
 
     /**
      * Enter the user's information.
@@ -88,7 +156,7 @@ public class AddNewUserDialog {
      * Click the save button.
      */
     public void save(){
-        save_button.shouldBe(Condition.visible);
+        save_button.waitUntil(Condition.visible,9000);
         save_button.click();
 
     }
@@ -97,7 +165,7 @@ public class AddNewUserDialog {
      * Click the cancel button.
      */
     public void cancel(){
-        cancel_button.shouldBe(Condition.visible);
+        cancel_button.waitUntil(Condition.visible,9000);
         cancel_button.click();
     }
 

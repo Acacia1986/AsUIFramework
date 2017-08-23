@@ -27,8 +27,9 @@ public class AddApplicationRoleDialog {
     /**
      * check the Add Role dialog title.
      */
-    public void checkAddRoleDialogTitle(){
-        add_app_role_title.shouldHave(Condition.matchText("Add Custom Application Role"));
+    public SelenideElement getAddRoleDialogTitle(){
+        //add_app_role_title.shouldHave(Condition.matchText("Add Custom Application Role"));
+        return add_app_role_title;
     }
 
     /**
@@ -45,7 +46,7 @@ public class AddApplicationRoleDialog {
      * Click the save button.
      */
     public void save(){
-        save_Button.shouldBe(Condition.appear);
+        save_Button.waitUntil(Condition.appear,9000);
         save_Button.click();
     }
 
@@ -54,7 +55,7 @@ public class AddApplicationRoleDialog {
      * Click the cancel button.
      */
     public void cancel(){
-        cancel_Button.shouldBe(Condition.appear);
+        cancel_Button.waitUntil(Condition.appear,9000);
         cancel_Button.click();
     }
 

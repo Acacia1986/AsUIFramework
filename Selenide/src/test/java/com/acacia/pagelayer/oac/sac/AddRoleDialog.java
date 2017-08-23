@@ -26,8 +26,9 @@ public class AddRoleDialog {
     /**
      * check the Add Role dialog title
      */
-    public void checkAddRoleDialogTitle(){
-        add_role_title.shouldHave(Condition.matchText("Add New Role"));
+    public SelenideElement getAddRoleDialogTitle(){
+        //add_role_title.shouldHave(Condition.matchText("Add New Role"));
+        return add_role_title;
     }
 
     /**
@@ -48,7 +49,7 @@ public class AddRoleDialog {
      * Click the save button.
      */
     public void save(){
-        save_Button.shouldBe(Condition.appear);
+        save_Button.waitUntil(Condition.appear,9000);
         save_Button.doubleClick();
     }
 
@@ -57,7 +58,7 @@ public class AddRoleDialog {
      * Click the cancel button.
      */
     public void cancel(){
-        cancel_Button.shouldBe(Condition.appear);
+        cancel_Button.waitUntil(Condition.appear,9000);
         cancel_Button.click();
     }
 

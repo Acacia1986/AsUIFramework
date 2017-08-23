@@ -1,11 +1,9 @@
 package com.acacia.pagelayer.oac.sac.base;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -19,9 +17,9 @@ public class AnalyticsPage {
     SelenideElement my_Account_Option = $(By.xpath(".//*[@id='menuOptionItem_MyAccount']"));
     SelenideElement preferences_Table = $(By.xpath(".//*[@id='idGeneralPreferencesTable']"));
     SelenideElement application_Roles_Tab = $(By.xpath(".//div[@title='Application Roles']"));
-    List<SelenideElement> roles_List =  $$(By.xpath(".//*[@id='idGroupsTab_body']/div/table/tbody/tr/td/div"));
+    ElementsCollection roles_List =  $$(By.xpath(".//*[@id='idGroupsTab_body']/div/table/tbody/tr/td/div"));
     SelenideElement cancel_Button = $(By.xpath(".//*[@name='Cancel']"));
-    List<SelenideElement> action_List = $$(By.xpath(".//td[contains(@class,'masterHeader')]/span"));
+    ElementsCollection action_List = $$(By.xpath(".//td[contains(@class,'masterHeader')]/span"));
 
 
 
@@ -31,7 +29,7 @@ public class AnalyticsPage {
      */
     public void clickUseNameDropDown(){
         login_User_Name.waitUntil(Condition.appear,9000);
-        login_User_Name.shouldBe(Condition.enabled);
+        login_User_Name.waitUntil(Condition.enabled,9000);
         login_User_Name.click();
     }
 
@@ -39,7 +37,7 @@ public class AnalyticsPage {
      * Choose My Account option.
      */
     public void chooseMyAccount(){
-        my_Account_Option.shouldBe(Condition.appear);
+        my_Account_Option.waitUntil(Condition.appear,9000);
         my_Account_Option.click();
     }
 
@@ -54,7 +52,7 @@ public class AnalyticsPage {
      * Choose Application Roles.
      */
     public void chooseApplicationRoles(){
-        application_Roles_Tab.shouldBe(Condition.enabled);
+        application_Roles_Tab.waitUntil(Condition.enabled,9000);
         application_Roles_Tab.click();
     }
 
@@ -62,15 +60,19 @@ public class AnalyticsPage {
      * Get the user's application roles.
      * @return
      */
-    public List<String> checkRolesOfUserHave(){
-        List<String> rolesName = new ArrayList<String>();
-        String title;
-       for(int i = 0;i < roles_List.size();i++){
-           title = roles_List.get(i).getAttribute("title");
-           rolesName.add(title);
-        }
-        return rolesName;
+    public ElementsCollection getRolesOfUserHave(){
+//        List<SelenideElement> rolesName = new ArrayList<SelenideElement>();
+//        SelenideElement title;
+//       for(int i = 0;i < roles_List.size();i++){
+//           title = roles_List.get(i);
+//           rolesName.add(title);
+//        }
+//        return rolesName;
+      return roles_List;
     }
+
+
+
 
     /**
      * Click cancel button from the My Account dialog.
@@ -83,14 +85,14 @@ public class AnalyticsPage {
      * Get the Create... action list.
      * @return
      */
-    public List<String> getCreateActionTitleList(){
-        List<String> action_title = new ArrayList<String>();
-        String title;
-        for (int i =0;i < action_title.size(); i++){
-            title = action_List.get(i).getText();
-            action_title.add(title);
-        }
-        return action_title;
+    public ElementsCollection getCreateActionTitleList(){
+//        List<String> action_title = new ArrayList<String>();
+//        String title;
+//        for (int i =0;i < action_title.size(); i++){
+//            title = action_List.get(i).getText();
+//            action_title.add(title);
+//        }
+        return action_List;
     }
 
 

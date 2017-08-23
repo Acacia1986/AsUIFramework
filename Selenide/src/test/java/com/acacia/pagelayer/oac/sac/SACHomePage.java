@@ -1,6 +1,6 @@
 package com.acacia.pagelayer.oac.sac;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -34,8 +34,9 @@ public class SACHomePage {
     /**
      * Check app role management should be selected as default.
      */
-    public void AppRoleManagementShouldBeSelectedAsDefault(){
-        $(By.xpath(".//*[@role='presentation']/a[.='Application Role Management']")).shouldHave(Condition.attribute("aria-selected"));
+    public SelenideElement getAppRoleManagement(){
+        //$(By.xpath(".//*[@role='presentation']/a[.='Application Role Management']")).shouldHave(Condition.attribute("aria-selected"));
+        return $(By.xpath(".//*[@role='presentation']/a[.='Application Role Management']"));
     }
 
     /**

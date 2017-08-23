@@ -1,14 +1,11 @@
 package com.acacia.pagelayer.oac.sac;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
-import java.util.List;
-
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * Created by miaomiao on 8/17/2017.
@@ -21,8 +18,8 @@ public class AppRoleManagementPanel {
     SelenideElement add_new_user_dialog = $(By.xpath(".//*[@role='dialog']"));
     SelenideElement search_box = $(By.xpath(".//input[contains(@id,'itSearchUsers')]"));
     SelenideElement search_user_result = $(By.xpath(".//*[contains(@id,'userDisplayName')]"));
-    List<SelenideElement> search_users_result_list = $$(By.xpath(".//div[(@aria-label='Users')]/div[2]/table/tbody/tr"));
-    List<SelenideElement> search_roles_result_list = $$(By.xpath(".//div[(@aria-label='Roles')]/div[2]/table/tbody/tr"));
+    ElementsCollection search_users_result_list = $$(By.xpath(".//div[(@aria-label='Users')]/div[2]/table/tbody/tr"));
+    ElementsCollection search_roles_result_list = $$(By.xpath(".//div[(@aria-label='Roles')]/div[2]/table/tbody/tr"));
 
     SelenideElement add_button_role = $(By.xpath(".//*[contains(@id,'ctb1CreateRole')]/a"));
     SelenideElement add_new_role_dialog = $(By.xpath(".//*[@role='dialog']"));
@@ -35,14 +32,16 @@ public class AppRoleManagementPanel {
 
 
 
+
     public static enum SubTab{
         USERS,
         ROLES,
         APPLICATION_ROLES
     }
 
-    public void checkUsersTabBeSelectedAsDefault(){
-        user_tab.shouldHave(Condition.attribute("aria-selected"));
+    public SelenideElement getUsersTab(){
+        return user_tab;
+       // user_tab.shouldHave(Condition.attribute("aria-selected"));
     }
 
     /**
@@ -80,7 +79,7 @@ public class AppRoleManagementPanel {
      */
     public void clickAddUser(){
         do{
-            add_button_user.shouldBe(Condition.visible);
+            add_button_user.waitUntil(Condition.visible,9000);
             add_button_user.doubleClick();
             add_new_user_dialog.waitUntil(Condition.appear,9000);
         }while(!add_new_user_dialog.isDisplayed());
@@ -89,8 +88,9 @@ public class AppRoleManagementPanel {
     /**
      * Check the Add New User dialog should pop-up after click Add button.
      */
-    public void checkAddNewUserDialogDisplay(){
-        add_new_user_dialog.shouldBe(Condition.appear);
+    public SelenideElement getAddNewUserDialog(){
+        return add_new_user_dialog;
+        //add_new_user_dialog.shouldBe(Condition.appear);
     }
 
 
@@ -108,7 +108,7 @@ public class AppRoleManagementPanel {
      * Get the Add New User dialog.
      * @return
      */
-    public AddNewUserDialog getAddNewUserDialog(){
+    public AddNewUserDialog initAddNewUserDialog(){
         return new AddNewUserDialog();
     }
 
@@ -134,8 +134,6 @@ public class AppRoleManagementPanel {
            sleep(3000);
            end_time = System.currentTimeMillis();
            size = search_users_result_list.size();
-            System.out.println("List size is " + search_users_result_list.size() );
-            System.out.println(end_time - start_time );
 
         }while(size >1 && end_time-start_time<20000);
 
@@ -146,9 +144,10 @@ public class AppRoleManagementPanel {
      * Find the new created user's text.
      * @return
      */
-    public Boolean checkCreatedUserDisplayOrNot(String userName){
-        System.out.println("@@@"+ search_user_result.getText()+"@@@");
-        return  search_user_result.getText().equals(userName);
+    public SelenideElement getNewCreatedUser(){
+       // System.out.println("@@@"+ search_user_result.getText()+"@@@");
+        //return  search_user_result.getText().equals(userName);
+        return search_user_result;
     }
 
 
@@ -157,18 +156,13 @@ public class AppRoleManagementPanel {
      */
     public void clickAddRole(){
         do{
-            add_button_role.shouldBe(Condition.appear);
+            add_button_role.waitUntil(Condition.appear,9000);
             add_button_role.doubleClick();
             //add_new_role_dialog.waitUntil(Condition.appear,9000);
         }while(!add_new_role_dialog.isDisplayed());
     }
 
-    /**
-     * Check the Add Role dialog displayed.
-     */
-    public void checkAddRoleDialogDisplay(){
-        add_new_role_dialog.shouldBe(Condition.appear);
-    }
+
 
     /**
      * Wait until add role dialog disappear.
@@ -188,12 +182,8 @@ public class AppRoleManagementPanel {
         do{
             sleep(3000);
             end_time = System.currentTimeMillis();
-             size = search_roles_result_list.size();
-            System.out.println("List size is " + search_roles_result_list.size() );
-            System.out.println(end_time - start_time );
-
+            size = search_roles_result_list.size();
         }while(size > 1 && end_time-start_time<20000);
-
     }
 
 
@@ -208,11 +198,11 @@ public class AppRoleManagementPanel {
 
     /**
      * Check create role successfully.
-     * @param roleName
      * @return
      */
-    public Boolean checkCreatedRoleDisplayOrNot(String roleName){
-        return search_role_result.getText().equals(roleName);
+    public SelenideElement getNewCreatedRole(){
+       // return search_role_result.getText().equals(roleName);
+        return search_role_result;
     }
 
     /**
@@ -221,31 +211,34 @@ public class AppRoleManagementPanel {
     public void addToMember(){
         SelenideElement member_Link = $(By.xpath(".//*[contains(@id,'membertitleLink')]"));
         member_Link.waitUntil(Condition.appear,9000);
-        member_Link.shouldBe(Condition.enabled);
+        member_Link.waitUntil(Condition.enabled,9000);
         member_Link.click();
     }
 
     /**
      * Check Manage Member Container displayed or not.
      */
-    public void checkManageMemberContainerDisplayOrNot(){
+    public SelenideElement getManageMemberContainer(){
         manage_member_container.waitUntil(Condition.appear,9000);
-        manage_member_container.shouldBe(Condition.appear);
+       // manage_member_container.shouldBe(Condition.appear);
+        return manage_member_container;
     }
 
     /**
      * Get the Manage Member Container.
      * @return
      */
-    public ManageMemberContainer getManageMemberContainer(){
+    public ManageMemberContainer initManageMemberContainer(){
         return new ManageMemberContainer();
     }
 
     /**
      * Check member user number displayed or not.
      */
-    public void checkAddUserMemeberSuccessOrNot(){
-        $(By.xpath(".//a[contains(@id,'numberUsers')]")).shouldBe(Condition.appear);
+    public SelenideElement getNewAddedUserFromSelectedMemeber(){
+        //$(By.xpath(".//a[contains(@id,'numberUsers')]")).shouldBe(Condition.appear);
+        SelenideElement user_In_Selected = $(By.xpath(".//a[contains(@id,'numberUsers')]"));
+        return user_In_Selected;
     }
 
 
@@ -256,12 +249,7 @@ public class AppRoleManagementPanel {
         this.clickAddRole();
     }
 
-    /**
-     * Check application role dialog display or not.
-     */
-    public void checkAppRoleDialogDisplayOrNot(){
-        this.checkAddRoleDialogDisplay();
-    }
+
 
     /**
      * Get the Add Application Role Dialog.
@@ -275,11 +263,11 @@ public class AppRoleManagementPanel {
 
     /**
      * Check create app role successfully.
-     * @param roleName
      * @return
      */
-    public Boolean checkCreatedAppRoleDisplayOrNot(String roleName){
-        return search_app_role_result.getText().equals(roleName);
+    public SelenideElement getCreatedAppRole(){
+        //return search_app_role_result.getText().equals(roleName);
+        return search_app_role_result;
     }
 
 
@@ -289,7 +277,7 @@ public class AppRoleManagementPanel {
     public void addToAppMember(){
         SelenideElement app_member_Link = $(By.xpath(".//*[contains(@id,'memberlink')]"));
         app_member_Link.waitUntil(Condition.appear,9000);
-        app_member_Link.shouldBe(Condition.enabled);
+        app_member_Link.waitUntil(Condition.enabled,9000);
         app_member_Link.click();
     }
 
@@ -297,15 +285,17 @@ public class AppRoleManagementPanel {
     /**
      * Check member role number displayed or not.
      */
-    public void checkAddRoleMemeberSuccessOrNot(){
-        $(By.xpath(".//a[contains(@id,'numberGroups')]")).shouldBe(Condition.appear);
+    public SelenideElement getNewAddedRoleFromSelectedMemeber(){
+        //$(By.xpath(".//a[contains(@id,'numberGroups')]")).shouldBe(Condition.appear);
+        SelenideElement role_In_Selected = $(By.xpath(".//a[contains(@id,'numberGroups')]"));
+        return role_In_Selected;
     }
 
     /**
      * Sign out sac site.
      */
     public void signOut(){
-        sign_Out_link.shouldBe(Condition.enabled);
+        sign_Out_link.waitUntil(Condition.enabled,9000);
         sign_Out_link.click();
     }
 

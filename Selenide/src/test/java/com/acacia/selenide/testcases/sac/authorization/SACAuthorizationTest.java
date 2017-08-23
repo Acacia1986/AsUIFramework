@@ -3,13 +3,13 @@ package com.acacia.selenide.testcases.sac.authorization;
 import com.acacia.pagelayer.oac.sac.*;
 import com.acacia.pagelayer.oac.sac.base.AnalyticsPage;
 import com.acacia.pagelayer.oac.sac.base.LoginPage;
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.List;
 import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.navigator;
@@ -49,38 +49,44 @@ public class SACAuthorizationTest {
         logger.info("testSACAuthorization");
         //Step 1
         sacHomePage = new SACHomePage();
-        sacHomePage.AppRoleManagementShouldBeSelectedAsDefault();
+        sacHomePage.getAppRoleManagement().shouldHave(Condition.attribute("aria-selected"));
         appRoleManagementPanel = new AppRoleManagementPanel();
-        appRoleManagementPanel.checkUsersTabBeSelectedAsDefault();
+        appRoleManagementPanel.getUsersTab().shouldHave(Condition.attribute("aria-selected"));
         //Step 2 create User.
         appRoleManagementPanel.clickAddUser();
-        appRoleManagementPanel.checkAddNewUserDialogDisplay();
-        addNewUserDialog = appRoleManagementPanel.getAddNewUserDialog();
-        addNewUserDialog.checkAddUserDialogTitle();
-        addNewUserDialog.checkFieldShouldBeRequired();
+        appRoleManagementPanel.getAddNewUserDialog().shouldBe(Condition.appear);
+        addNewUserDialog = appRoleManagementPanel.initAddNewUserDialog();
+        addNewUserDialog.getAddUserDialogTitle().shouldHave(Condition.matchText("Add New User"));
+        //Check the fields are required.
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.USER_NAME).shouldHave(Condition.attribute("title:Required"));
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.FIRST_NAME).shouldHave(Condition.attribute("title:Required"));
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.LAST_NAME).shouldHave(Condition.attribute("title:Required"));
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.PASSWORD).shouldHave(Condition.attribute("title:Required"));
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.CONFIRM_PASSWORD).shouldHave(Condition.attribute("title:Required"));
+        //Enter user information.
         addNewUserDialog.enterUserInfo(user_name,user_name,user_name,null,null,null,"welcome1","welcome1");
         addNewUserDialog.save();
         appRoleManagementPanel.waitUntilAddUserDisappear();
         //Find this new user to make sure it created.
         appRoleManagementPanel.search(user_name);
         appRoleManagementPanel.waitUntilGetResultList();//
-        Assert.assertTrue(appRoleManagementPanel.checkCreatedUserDisplayOrNot(user_name));
+        appRoleManagementPanel.getNewCreatedUser().shouldHave(Condition.text(user_name));
         //Step 3 Create Role.
         appRoleManagementPanel.selectSubTab(AppRoleManagementPanel.SubTab.ROLES);
         appRoleManagementPanel.clickAddRole();
         addRoleDialog = appRoleManagementPanel.getAddRoleDialog();
-        addRoleDialog.checkAddRoleDialogTitle();
-        addRoleDialog.enterRoleInfo("Role_123",role_name,null);
+        addRoleDialog.getAddRoleDialogTitle().shouldHave(Condition.text("Add New Role"));
+        addRoleDialog.enterRoleInfo(role_name,role_name,null);
         addRoleDialog.save();
         appRoleManagementPanel.waitUntilAddRoleDialogDisappear();
-        appRoleManagementPanel.search("Role_123");
+        appRoleManagementPanel.search(role_name);
         appRoleManagementPanel.waitUntilGetRolesResultList();
-        Assert.assertTrue(appRoleManagementPanel.checkCreatedRoleDisplayOrNot("Role_123"));
+        appRoleManagementPanel.getNewCreatedRole().shouldHave(Condition.text(role_name));
         //Step 4
         appRoleManagementPanel.addToMember();
-        appRoleManagementPanel.checkManageMemberContainerDisplayOrNot();
+        appRoleManagementPanel.getManageMemberContainer().shouldBe(Condition.appear);
         //Step 5
-        manageMemberContainer = appRoleManagementPanel.getManageMemberContainer();
+        manageMemberContainer = appRoleManagementPanel.initManageMemberContainer();
         manageMemberContainer.selectOption(ManageMemberContainer.Options.USER);
         manageMemberContainer.enterNameToFilter(user_name);
         manageMemberContainer.clickSearchButton();
@@ -88,20 +94,20 @@ public class SACAuthorizationTest {
         manageMemberContainer.selectAvailableUserToSelectedUser();
         manageMemberContainer.clickOKButton();
         //Verify add member successful.
-        appRoleManagementPanel.checkAddUserMemeberSuccessOrNot();
+        appRoleManagementPanel.getNewAddedUserFromSelectedMemeber().shouldBe(Condition.appear);
         //Step 6
         appRoleManagementPanel.selectSubTab(AppRoleManagementPanel.SubTab.APPLICATION_ROLES);
-        appRoleManagementPanel.clickAddRole();
+        appRoleManagementPanel.clickAddAppRole();
         addApplicationRoleDialog = appRoleManagementPanel.getAddApplicationRoleDialog();
-        addApplicationRoleDialog.checkAddRoleDialogTitle();
+        addApplicationRoleDialog.getAddRoleDialogTitle().shouldHave(Condition.text("Add Custom Application Role"));
         addApplicationRoleDialog.enterApplicationRoleInfo(app_role_name,app_role_name,null);
         addApplicationRoleDialog.save();
         appRoleManagementPanel.search(app_role_name);
-        Assert.assertTrue(appRoleManagementPanel.checkCreatedAppRoleDisplayOrNot(app_role_name));
+        appRoleManagementPanel.getCreatedAppRole().shouldHave(Condition.text(app_role_name));
         //Step 7
         appRoleManagementPanel.addToAppMember();
-        appRoleManagementPanel.checkManageMemberContainerDisplayOrNot();
-        manageMemberContainer = appRoleManagementPanel.getManageMemberContainer();
+        appRoleManagementPanel.getManageMemberContainer();
+        manageMemberContainer = appRoleManagementPanel.initManageMemberContainer();
         manageMemberContainer.selectOption(ManageMemberContainer.Options.ROLES);
         manageMemberContainer.enterNameToFilter(role_name);
         manageMemberContainer.clickSearchButton();
@@ -109,7 +115,7 @@ public class SACAuthorizationTest {
         manageMemberContainer.selectAvailableUserToSelectedUser();
         manageMemberContainer.clickOKButton();
         //Verify add role successful
-        appRoleManagementPanel.checkAddRoleMemeberSuccessOrNot();
+        appRoleManagementPanel.getNewAddedRoleFromSelectedMemeber().shouldBe(Condition.appear);
         //Step 8
         appRoleManagementPanel.signOut();
         navigator.open(URL +"analytics");
@@ -120,14 +126,10 @@ public class SACAuthorizationTest {
         analyticsPage.chooseMyAccount();
         analyticsPage.waitUntilMyAccountRending();
         analyticsPage.chooseApplicationRoles();
-        List<String> getRoleName = analyticsPage.checkRolesOfUserHave();
-        Assert.assertTrue(getRoleName.contains("Authenticated User"));
-        Assert.assertTrue(getRoleName.contains("BI Consumer"));
-        Assert.assertTrue(getRoleName.contains("qa_app_role"));
+        analyticsPage.getRolesOfUserHave().shouldHave(CollectionCondition.texts("Authenticated User","BI Consumer","qa_app_role"));
         analyticsPage.cancel();
         //Step 10
-        List<String> action_List = analyticsPage.getCreateActionTitleList();
-        Assert.assertTrue(action_List.contains("Actionable Intelligence"));
+        analyticsPage.getCreateActionTitleList().shouldHave(CollectionCondition.texts("Actionable Intelligence"));
     }
 
 

@@ -57,7 +57,7 @@ public class ManageMemberContainer {
      * Click search button.
      */
     public void clickSearchButton(){
-        search_Button.should(Condition.enabled);
+        search_Button.waitUntil(Condition.enabled,9000);
         search_Button.doubleClick();
     }
 
@@ -79,7 +79,7 @@ public class ManageMemberContainer {
      */
     public void selectAvailableUserToSelectedUser(){
         SelenideElement available_User = $(By.xpath(".//input[contains(@id,'memberShuttle')]"));
-        available_User.shouldBe(Condition.appear);
+        available_User.waitUntil(Condition.appear,9000);
         available_User.click();
         move_Selected_User_To_Selected.waitUntil(Condition.enabled,9000);
         move_Selected_User_To_Selected.click();
@@ -90,12 +90,8 @@ public class ManageMemberContainer {
      * Click Ok button.
      */
     public void clickOKButton(){
-        ok_Button.shouldBe(Condition.appear);
+        ok_Button.waitUntil(Condition.appear,9000);
         ok_Button.click();
     }
-
-
-
-
 
 }
