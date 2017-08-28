@@ -3,6 +3,7 @@ package com.acacia.selenide.testcases.sac.authorization;
 import com.acacia.pagelayer.oac.sac.*;
 import com.acacia.pagelayer.oac.sac.base.AnalyticsPage;
 import com.acacia.pagelayer.oac.sac.base.LoginPage;
+import com.acacia.selenide.test.OAC.BaseTest;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import static com.codeborne.selenide.Selenide.open;
 /**
  * Created by miaomiao on 8/17/2017.
  */
-public class SACAuthorizationTest {
+public class SACAuthorizationTest extends BaseTest{
     Logger logger = LoggerFactory.getLogger(SACAuthorizationTest.class);
     private LoginPage loginPage;
     private SACHomePage sacHomePage;
