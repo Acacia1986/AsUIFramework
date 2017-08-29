@@ -14,11 +14,12 @@ import static com.codeborne.selenide.Selenide.sleep;
 public class ManageMemberContainer {
     SelenideElement type_Filter = $(By.xpath(".//*[contains(@id,'sol1FilterType::content')]"));
     SelenideElement name_Filter = $(By.xpath(".//*[contains(@id,'PickerFilter::content')]"));
-    SelenideElement search_Button = $(By.xpath(".//*[contains(@id,'PickerSearch')]"));
-    SelenideElement available_User_Panel = $(By.xpath(".//*[contains(@id,'memberShuttle::leadUl')]"));
-    SelenideElement selected_User_Panel = $(By.xpath(".//*[contains(@id,'memberShuttle::trailUl')]"));
+    SelenideElement search_Button = $(By.xpath(".//button[contains(@id,'PickerSearch')]"));
+    SelenideElement available_User = $(By.xpath(".//*[contains(@id,'memberShuttle::leadUl')]/li"));
+    SelenideElement selected_User = $(By.xpath(".//*[contains(@id,'memberShuttle::trailUl')]/li"));
     SelenideElement move_Selected_User_To_Selected = $(By.xpath(".//a[@title='Move selected items to: Selected Users']"));
     SelenideElement ok_Button = $(By.xpath(".//button[.='OK']"));
+    SelenideElement move_app_role_button = $(By.xpath(".//a[@title = 'Move selected items to: Selected Roles']"));
 
     public enum Options{
         USER,
@@ -47,10 +48,13 @@ public class ManageMemberContainer {
      * @param name
      */
     public void enterNameToFilter(String name){
-       // name_Filter.setValue(name);
         name_Filter.clear();
-        name_Filter.click();
+        //name_Filter.sendKeys(name);
+        name_Filter.setValue(name);
+        sleep(9000);
         executeJavaScript("arguments[0].setAttribute('value',arguments[1])",name_Filter,name);
+        String value = name_Filter.val();
+        System.out.println("Value: " + value);
     }
 
     /**
@@ -58,33 +62,39 @@ public class ManageMemberContainer {
      */
     public void clickSearchButton(){
         search_Button.waitUntil(Condition.enabled,9000);
-        search_Button.doubleClick();
+        search_Button.click();
+        sleep(30000);
     }
 
     /**
      * Wait until the result displayed in the available panel.
      */
     public void waitUntilGetResult(){
-       //available_User_Panel.$(By.xpath("/li/label/input")).waitUntil(Condition.appear,9000);
-
-        do{
-            sleep(3000);
-
-        }while(!available_User_Panel.find(By.xpath("/li/label/input")).isDisplayed());
-
+       available_User.waitUntil(Condition.appear,30000);
     }
 
     /**
      * Select available user to selected user.
      */
     public void selectAvailableUserToSelectedUser(){
-        SelenideElement available_User = $(By.xpath(".//input[contains(@id,'memberShuttle')]"));
+       // SelenideElement available_User = $(By.xpath(".//input[contains(@id,'memberShuttle')]"));
         available_User.waitUntil(Condition.appear,9000);
         available_User.click();
         move_Selected_User_To_Selected.waitUntil(Condition.enabled,9000);
         move_Selected_User_To_Selected.click();
-        selected_User_Panel.$(By.xpath("/li/label/input")).waitUntil(Condition.appear,9000);
+        selected_User.waitUntil(Condition.appear,9000);
     }
+
+    public void selectAvailableRoleToSelectedRole(){
+        // SelenideElement available_User = $(By.xpath(".//input[contains(@id,'memberShuttle')]"));
+        available_User.waitUntil(Condition.appear,9000);
+        available_User.click();
+        move_app_role_button.waitUntil(Condition.enabled,9000);
+        move_app_role_button.click();
+        selected_User.waitUntil(Condition.appear,9000);
+    }
+
+
 
     /**
      * Click Ok button.

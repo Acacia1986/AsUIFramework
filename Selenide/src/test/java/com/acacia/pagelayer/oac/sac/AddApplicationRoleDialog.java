@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.sleep;
 
 /**
  * Created by miaomiao on 8/21/2017.
@@ -36,9 +37,9 @@ public class AddApplicationRoleDialog {
      * Enter the application role information.
      */
     public void enterApplicationRoleInfo(String... roleInfo){
-        role_Name_Input.sendKeys(roleInfo[0]);
-        role_Display_Name_Input.sendKeys(roleInfo[1]);
-        role_Description_TextArea.sendKeys(roleInfo[2]);
+        role_Name_Input.setValue(roleInfo[0]);
+        role_Display_Name_Input.setValue(roleInfo[1]);
+        role_Description_TextArea.setValue(roleInfo[2]);
     }
 
 
@@ -47,7 +48,11 @@ public class AddApplicationRoleDialog {
      */
     public void save(){
         save_Button.waitUntil(Condition.appear,9000);
-        save_Button.click();
+        do{
+            save_Button.click();
+            sleep(4000);
+        }while(add_app_role_title.isDisplayed());
+
     }
 
 

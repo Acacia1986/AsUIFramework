@@ -22,11 +22,13 @@ public class AppRoleManagementPanel {
     ElementsCollection search_roles_result_list = $$(By.xpath(".//div[(@aria-label='Roles')]/div[2]/table/tbody/tr"));
 
     SelenideElement add_button_role = $(By.xpath(".//*[contains(@id,'ctb1CreateRole')]/a"));
-    SelenideElement add_new_role_dialog = $(By.xpath(".//*[@role='dialog']"));
+    SelenideElement add_new_role_dialog = $(By.xpath(".//div[contains(@id,'createRolePopup::popup-container')]"));
     SelenideElement search_role_result = $(By.xpath(".//*[contains(@id,'roleDisplayName')]"));
     SelenideElement manage_member_container = $(By.xpath(".//*[contains(@id,'ZombieMemberPicker::popup-container')]"));
     SelenideElement search_app_role_result = $(By.xpath(".//*[contains(@id,'approlesDisplayName')]"));
     SelenideElement sign_Out_link = $(By.xpath(".//a[.='Sign Out']"));
+    SelenideElement add_app_role_dialog = $(By.xpath(".//div[contains(@id,'CreateRole::popup-container')]"));
+    SelenideElement search_app_box = $(By.xpath(".//input[contains(@id,'itSearchAppRoles')]"));
 
 
 
@@ -123,6 +125,13 @@ public class AppRoleManagementPanel {
 
     }
 
+    public void searchAPP(String name){
+        search_app_box.waitUntil(Condition.enabled,9000);
+        search_app_box.clear();
+        search_app_box.sendKeys(name);
+        search_app_box.pressEnter();
+    }
+
     /**
      *wait until only one result in the list.
      */
@@ -156,10 +165,14 @@ public class AppRoleManagementPanel {
      */
     public void clickAddRole(){
         do{
-            add_button_role.waitUntil(Condition.appear,9000);
-            add_button_role.doubleClick();
-            //add_new_role_dialog.waitUntil(Condition.appear,9000);
+            add_button_role.waitUntil(Condition.enabled,9000);
+            add_button_role.click();
+            sleep(9000);
+            //add_button_role.doubleClick();
+            //add_new_role_dialog.waitUntil(Condition.appear,30000);
         }while(!add_new_role_dialog.isDisplayed());
+
+
     }
 
 
@@ -246,7 +259,11 @@ public class AppRoleManagementPanel {
      * Click the Add button to add an application role.
      */
     public void clickAddAppRole(){
-        this.clickAddRole();
+        do{
+            add_button_role.waitUntil(Condition.enabled,9000);
+            add_button_role.click();
+            sleep(9000);
+        }while(!add_app_role_dialog.isDisplayed());
     }
 
 

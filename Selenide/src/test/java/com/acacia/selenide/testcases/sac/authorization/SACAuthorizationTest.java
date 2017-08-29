@@ -6,12 +6,11 @@ import com.acacia.pagelayer.oac.sac.base.LoginPage;
 import com.acacia.selenide.test.OAC.BaseTest;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.navigator;
 import static com.codeborne.selenide.Selenide.open;
@@ -29,18 +28,22 @@ public class SACAuthorizationTest extends BaseTest{
     private ManageMemberContainer manageMemberContainer;
     private AddApplicationRoleDialog addApplicationRoleDialog;
     private AnalyticsPage analyticsPage;
-    public static String URL = "http://slc02wam.us.oracle.com:9704/";
+    public static String URL = "http://slc08cdr.us.oracle.com:9704/";
     public String user_name = "QA_"+ System.currentTimeMillis();
            // new Random().nextInt(10);
-    public String role_name = "RoleQA"+ new Random().nextFloat();
+    public String role_name = "RoleQA"+ System.currentTimeMillis();
+                   //new Random().nextFloat();
     public String app_role_name = "APPRole"+ System.currentTimeMillis();
                            //new Random().nextInt(10);
+
 
 
 
     @BeforeMethod
     public void beforeMethod(){
         logger.info("Start before method");
+        //Configuration.browser = WebDriverRunner.PHANTOMJS;
+        Configuration.timeout = 15000;
         open(URL + "biserviceadministration/faces/index.jspx");
         loginPage = new LoginPage();
         loginPage.Login("admin","welcome1");
@@ -59,11 +62,12 @@ public class SACAuthorizationTest extends BaseTest{
         addNewUserDialog = appRoleManagementPanel.initAddNewUserDialog();
         addNewUserDialog.getAddUserDialogTitle().shouldHave(Condition.matchText("Add New User"));
         //Check the fields are required.
-        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.USER_NAME).shouldHave(Condition.attribute("title:Required"));
-        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.FIRST_NAME).shouldHave(Condition.attribute("title:Required"));
-        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.LAST_NAME).shouldHave(Condition.attribute("title:Required"));
-        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.PASSWORD).shouldHave(Condition.attribute("title:Required"));
-        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.CONFIRM_PASSWORD).shouldHave(Condition.attribute("title:Required"));
+        Condition condition = Condition.attribute("title","Required");
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.USER_NAME).shouldHave(condition);
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.FIRST_NAME).shouldHave(condition);
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.LAST_NAME).shouldHave(condition);
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.PASSWORD).shouldHave(condition);
+        addNewUserDialog.getFieldRequired(AddNewUserDialog.FIELDNAME.CONFIRM_PASSWORD).shouldHave(condition);
         //Enter user information.
         addNewUserDialog.enterUserInfo(user_name,user_name,user_name,null,null,null,"welcome1","welcome1");
         addNewUserDialog.save();
@@ -85,6 +89,7 @@ public class SACAuthorizationTest extends BaseTest{
         appRoleManagementPanel.getNewCreatedRole().shouldHave(Condition.text(role_name));
         //Step 4
         appRoleManagementPanel.addToMember();
+        appRoleManagementPanel.getManageMemberContainer().waitUntil(Condition.appear,30000);
         appRoleManagementPanel.getManageMemberContainer().shouldBe(Condition.appear);
         //Step 5
         manageMemberContainer = appRoleManagementPanel.initManageMemberContainer();
@@ -103,7 +108,7 @@ public class SACAuthorizationTest extends BaseTest{
         addApplicationRoleDialog.getAddRoleDialogTitle().shouldHave(Condition.text("Add Custom Application Role"));
         addApplicationRoleDialog.enterApplicationRoleInfo(app_role_name,app_role_name,null);
         addApplicationRoleDialog.save();
-        appRoleManagementPanel.search(app_role_name);
+        appRoleManagementPanel.searchAPP(app_role_name);
         appRoleManagementPanel.getCreatedAppRole().shouldHave(Condition.text(app_role_name));
         //Step 7
         appRoleManagementPanel.addToAppMember();
@@ -113,7 +118,7 @@ public class SACAuthorizationTest extends BaseTest{
         manageMemberContainer.enterNameToFilter(role_name);
         manageMemberContainer.clickSearchButton();
         manageMemberContainer.waitUntilGetResult();
-        manageMemberContainer.selectAvailableUserToSelectedUser();
+        manageMemberContainer.selectAvailableRoleToSelectedRole();
         manageMemberContainer.clickOKButton();
         //Verify add role successful
         appRoleManagementPanel.getNewAddedRoleFromSelectedMemeber().shouldBe(Condition.appear);
@@ -127,7 +132,7 @@ public class SACAuthorizationTest extends BaseTest{
         analyticsPage.chooseMyAccount();
         analyticsPage.waitUntilMyAccountRending();
         analyticsPage.chooseApplicationRoles();
-        analyticsPage.getRolesOfUserHave().shouldHave(CollectionCondition.texts("Authenticated User","BI Consumer","qa_app_role"));
+        analyticsPage.getRolesOfUserHave().shouldHave(CollectionCondition.texts(app_role_name,"Authenticated User","BI Consumer"));
         analyticsPage.cancel();
         //Step 10
         analyticsPage.getCreateActionTitleList().shouldHave(CollectionCondition.texts("Actionable Intelligence"));
