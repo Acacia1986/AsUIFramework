@@ -1,0 +1,54 @@
+group 'acacia.as.ui.test'
+version '1.0-SNAPSHOT'
+archivesBaseName="myJMeterProject"
+apply plugin: 'java'
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://artifactory-slc.oraclecorp.com/artifactory/'
+    }
+}
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs=['src']
+//        }
+//    }
+//}
+
+dependencies {
+    compile ('org.slf4j:slf4j-api:1.7.25', 'org.testng:testng:6.1.1',
+            'org.apache.jmeter:ApacheJMeter_java:3.3',)
+
+    compile fileTree(dir:'lib',include:'*.jar')
+}
+
+task taskJar(type:Jar, dependsOn: compileJava) {
+    from 'build/classes'
+    destinationDir = file('build/libs')
+}
+task clearPj(type:Delete){
+    delete 'build','target'
+}
+task release(type: Copy,dependsOn: [clearPj,taskJar]) {
+    from('build/libs') {
+        include '*.jar'
+    }
+    into ('C:/jmeter/apache-jmeter-3.3/lib/ext/')
+}
+
+//task copySample(type:Copy,dependsOn:[build]) {
+//
+//    copy {
+//
+//        from project.buildDir.getPath() + '/libs/test123.jar'
+//
+//        into 'C:/jmeter'
+//
+//    }
+//
+//}

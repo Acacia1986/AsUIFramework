@@ -32,7 +32,7 @@ public abstract class Context {
            return UiSynchronizedElement.getElment(this,seleniumContext().findElement(by),identifier,by.toString());
        } catch (StaleElementReferenceException e) {
            refresh();
-           return  new DynamicElement(this,seleniumContext().findElement(by),identifier,by.toString())
+           return  new DynamicElement(this,seleniumContext().findElement(by),identifier,by.toString());
        }
 
    }

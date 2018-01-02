@@ -57,7 +57,7 @@ public class Browser extends Context {
                 try {
                     Thread.sleep(BROWSER_MILLISECONDS_AFTER_MAXIMIZE);
                 } catch (InterruptedException e) {
-                    throw new ConfigurationException(e);
+                    throw new ConfigurationException();
                 }
             }
         } else {
