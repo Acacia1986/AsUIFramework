@@ -1,6 +1,5 @@
 group 'acacia.as.ui.test'
 version '1.0-SNAPSHOT'
-archivesBaseName="myJMeterProject"
 apply plugin: 'java'
 
 
