@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class LoginPage {
 
 
-    public void Login(String user,String pw){
+    public void login(String user, String pw){
         $(By.id("idUser")).setValue(user);
         $(By.id("idPassword")).setValue(pw);
         $(By.id("btn_login")).submit();

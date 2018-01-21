@@ -7,6 +7,7 @@ import com.acacia.selenide.test.OAC.BaseTest;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
@@ -28,7 +29,7 @@ public class SACAuthorizationTest extends BaseTest{
     private ManageMemberContainer manageMemberContainer;
     private AddApplicationRoleDialog addApplicationRoleDialog;
     private AnalyticsPage analyticsPage;
-    public static String URL = "http://slc08cdr.us.oracle.com:9704/";
+    public final static String URL = "http://slc08cdr.us.XXX.com:9704/";
     public String user_name = "QA_"+ System.currentTimeMillis();
            // new Random().nextInt(10);
     public String role_name = "RoleQA"+ System.currentTimeMillis();
@@ -37,16 +38,14 @@ public class SACAuthorizationTest extends BaseTest{
                            //new Random().nextInt(10);
 
 
-
-
     @BeforeMethod
     public void beforeMethod(){
         logger.info("Start before method");
         //Configuration.browser = WebDriverRunner.PHANTOMJS;
-        Configuration.timeout = 15000;
+        //Configuration.timeout = 15000;
         open(URL + "biserviceadministration/faces/index.jspx");
         loginPage = new LoginPage();
-        loginPage.Login("admin","welcome1");
+        loginPage.login("admin","welcome1");
     }
     @Test
     public void testSACAuthorization() {
@@ -125,7 +124,7 @@ public class SACAuthorizationTest extends BaseTest{
         //Step 8
         appRoleManagementPanel.signOut();
         navigator.open(URL +"analytics");
-        loginPage.Login(user_name,"welcome1");
+        loginPage.login(user_name,"welcome1");
         //Step 9
         analyticsPage = new AnalyticsPage();
         analyticsPage.clickUseNameDropDown();

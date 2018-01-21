@@ -23,11 +23,11 @@ public class SearchAskCreate1 {
         long time = System.currentTimeMillis();
         //Open VA
         open("http://slc08cwe.us.oracle.com:9704/va/home.jsp");
-        //Login as admin
+        //login as admin
         $(By.id("idUser")).setValue("dvauthoruser");
         $(By.id("idPassword")).setValue("welcome1");
         $(By.id("btn_login")).submit();
-        //Step 1 Login to VA. In Home page Find content Or visualize data search box, Start typing Product , auto suggest list will be displayed.
+        //Step 1 login to VA. In Home page Find content Or visualize data search box, Start typing Product , auto suggest list will be displayed.
         $(By.id("home-tokenized-searchfield:searchfield_2:hsc")).waitUntil(Condition.appear,90000);
         $(By.id("home-tokenized-searchfield:searchfield_2:hsc")).should(Condition.visible);
         $(By.className("senseCompleteInputField")).sendKeys("Product");

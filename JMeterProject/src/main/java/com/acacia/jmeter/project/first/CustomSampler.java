@@ -43,7 +43,7 @@ public class CustomSampler  extends AbstractJavaSamplerClient implements Seriali
 
     public SampleResult runTest(JavaSamplerContext javaSamplerContext) {
 
-        String method = javaSamplerContext.getParameter(METHOD_TAG);
+        //String method = javaSamplerContext.getParameter(METHOD_TAG);
 
         String arg1 = javaSamplerContext.getParameter(ARG1_TAG);
 

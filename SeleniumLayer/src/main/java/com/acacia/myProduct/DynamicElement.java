@@ -39,11 +39,11 @@ public class DynamicElement extends Element {
             if (refreshBy == null)
                 this.refreshBy = id.identify(this);
         } catch (IllegalStateException e) {
-           String message = String.format("Cause IllegalStateException: Trying to persist() a stale element. Try invoking persist() earlier.\n(%s)",
+           String message = String.format("Cause IllegalStateException: Trying to persist() a stale element. Try invoking persist() earlier.%n(%s)",
                    this.toString());
             throw new IllegalStateException(message, e);
         }catch (NoSuchElementException e){
-            String message = String.format("NoSuchElementException: Try invoking persist() earlier.\n(%s)", this.toString());
+            String message = String.format("NoSuchElementException: Try invoking persist() earlier.%n(%s)", this.toString());
             throw new IllegalStateException(message,e);
         }
     }

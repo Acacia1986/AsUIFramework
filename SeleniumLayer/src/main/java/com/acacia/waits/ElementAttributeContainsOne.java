@@ -2,6 +2,8 @@ package com.acacia.waits;
 
 import com.acacia.myProduct.Element;
 
+import java.util.Arrays;
+
 /**
  * Created by miaomiao on 6/7/2017.
  */
@@ -35,7 +37,7 @@ public class ElementAttributeContainsOne implements ElementCondition {
     @Override
     public String toString(){
         final StringBuilder values = new StringBuilder(valueToContains.length);
-        values.append(valueToContains);
+        values.append(Arrays.toString(valueToContains));
         return String.format("ElementAttributeContainsOne [Element: '%s'][attribute: '%s'][values: %s]", element,attribute,values.toString());
     }
 }

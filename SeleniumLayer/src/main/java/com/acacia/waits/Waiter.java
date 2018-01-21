@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException;
  * Created by miaomiao on 6/4/2017.
  */
 public final class Waiter {
-    public static Logger logger = LoggerFactory.getLogger(Waiter.class);
+    public  static final Logger logger = LoggerFactory.getLogger(Waiter.class);
     private static final String WAITER_DELAY_KEY = "waiter.delay";
     private static final String WAITER_TIMOUT_KEY = "waiter.timeout";
 

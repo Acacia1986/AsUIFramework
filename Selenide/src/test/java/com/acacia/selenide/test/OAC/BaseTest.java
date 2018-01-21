@@ -1,5 +1,6 @@
 package com.acacia.selenide.test.OAC;
 
+import com.codeborne.selenide.Configuration;
 import org.testng.annotations.BeforeSuite;
 
 import static com.codeborne.selenide.WebDriverRunner.PHANTOMJS;

@@ -2,6 +2,8 @@ package com.acacia.waits;
 
 import com.acacia.myProduct.Element;
 
+import java.util.Arrays;
+
 /**
  * Created by miaomiao on 6/6/2017.
  */
@@ -14,7 +16,7 @@ public class ElementAttributeContainsAll implements ElementCondition{
     public ElementAttributeContainsAll(Element element, String attribut, CharSequence[] valuesToConatin) {
         this.element = element;
         this.attribute = attribut;
-        this.valuesToContains = valuesToConatin;
+        this.valuesToContains = valuesToConatin.clone();
     }
 
 
@@ -36,7 +38,7 @@ public class ElementAttributeContainsAll implements ElementCondition{
     @Override
     public  String toString(){
         final StringBuilder values = new StringBuilder(valuesToContains.length);
-        values.append(valuesToContains);
+        values.append(Arrays.toString(valuesToContains));
         return String.format("ElementAttributeConainsAll [Element: %s][Attribute: %s][Values: %s]",element, attribute,values.toString());
     }
 }
